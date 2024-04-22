@@ -9,7 +9,7 @@
  * @param {ListNode} head
  * @return {number}
  */
- var reverseLinkedList = function(head) {
+var reverseLinkedList = function(head) {
     let temp = head;
     let prev = null;
 
@@ -20,8 +20,8 @@
         temp = front;
     }
     return prev;
- }
- var middleNode = function(head) {
+}
+var middleNode = function(head) {
     let slow = head;
     let fast = head;
 
