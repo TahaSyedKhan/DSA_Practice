@@ -1,3 +1,8 @@
+/**
+ * @param {number[]} arr
+ * @param {number} k
+ * @return {number[]}
+ */
 class Heap {
     constructor(cmp) {
         this.arr = [];
@@ -22,9 +27,6 @@ class Heap {
     }
     get() {
         return this.arr[0];
-    }
-    isEmpty() {
-        return this.arr.length == 0;
     }
     insert(data) {
         // 1. push the element in the array;
@@ -74,27 +76,34 @@ class Heap {
     }
 }
 
-let hp = new Heap((a, b) => {
-    return a > b; // a < b for max Heap & a > b for min Heap.
-});
-hp.insert(9);
-hp.insert(19);
-hp.insert(2);
-hp.insert(39);
-hp.insert(29);
-hp.insert(12);
-hp.insert(-9);
-hp.insert(6);
+class triplet {
+    constructor(ne, de, v) {
+        this.ne = ne; // numerator
+        this.de = de; // denominator
+        this.v = v   // value
+    }
+}
+var kthSmallestPrimeFraction = function(arr, k) {
+    let n = arr.length;
+    let minHeap = new Heap((a, b) => {
+        return a.v > b.v;
+    })
+    // store the fraction values in min heap
+    for(let i = 0; i < n; i++) {
+        minHeap.insert(new triplet(0, i, arr[0] / arr[i]));
+    }
 
-hp.display();
+    // remove the k - 1 time elements from min Heap
+    for(let i = 0; i < k - 1; i++) {
+        let ele = minHeap.get();
+        minHeap.remove();
 
-/**
- *                          39
- *                29                    12
- *       9               19       2            -9
- * 6
- * 
- */
+        // check if removed elements next fraction is in array then insert it into minHeap
+        if(ele.ne < n - 1) {
+            // ne will change de remains same
+            minHeap.insert(new triplet(ele.ne+1, ele.de, arr[ele.ne+1] / arr[ele.de]));
+        }
+    }
 
-hp.remove();
-hp.display();
+    return [arr[minHeap.get().ne], arr[minHeap.get().de]];
+};

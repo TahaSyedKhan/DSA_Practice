@@ -1,3 +1,8 @@
+/**
+ * @param {number[][]} points
+ * @param {number} k
+ * @return {number[][]}
+ */
 class Heap {
     constructor(cmp) {
         this.arr = [];
@@ -22,9 +27,6 @@ class Heap {
     }
     get() {
         return this.arr[0];
-    }
-    isEmpty() {
-        return this.arr.length == 0;
     }
     insert(data) {
         // 1. push the element in the array;
@@ -73,28 +75,27 @@ class Heap {
         console.log(this.arr);
     }
 }
-
-let hp = new Heap((a, b) => {
-    return a > b; // a < b for max Heap & a > b for min Heap.
-});
-hp.insert(9);
-hp.insert(19);
-hp.insert(2);
-hp.insert(39);
-hp.insert(29);
-hp.insert(12);
-hp.insert(-9);
-hp.insert(6);
-
-hp.display();
-
-/**
- *                          39
- *                29                    12
- *       9               19       2            -9
- * 6
- * 
- */
-
-hp.remove();
-hp.display();
+class point {
+    constructor(xi, yi) {
+        this.x = xi;
+        this.y = yi;
+        this.dist = Math.sqrt(xi*xi + yi*yi); // store Euclidean Distance
+    }
+}
+var kClosest = function(points, k) {
+    const hp = new Heap((pointA, pointB) => {
+    return pointA.dist > pointB.dist; // min Heap
+    });
+    for(let i = 0; i < points.length; i++) {
+    const p = new point(points[i][0], points[i][1]);
+    hp.insert(p);
+    }
+    let result = [];
+    while(k > 0) {
+    k--;
+    let val = [hp.get().x, hp.get().y];
+    result.push(val);
+    hp.remove();
+    }
+    return result;
+};
