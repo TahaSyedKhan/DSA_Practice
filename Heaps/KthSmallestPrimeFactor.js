@@ -85,25 +85,25 @@ class triplet {
 }
 var kthSmallestPrimeFraction = function(arr, k) {
     let n = arr.length;
-    let minHeap = new Heap((a, b) => {
-        return a.v > b.v;
+
+    // compare elements in MinHeap based on their fraction values
+    let minHeap = new Heap((t1, t2) => {
+        return t1.v > t2.v;
     })
-    // store the fraction values in min heap
+    // insert a triplet of numinator, denominator, and fraction into minHeap 
     for(let i = 0; i < n; i++) {
         minHeap.insert(new triplet(0, i, arr[0] / arr[i]));
     }
-
-    // remove the k - 1 time elements from min Heap
+    // remove elements from minHeap K-1 times, so you will Kth element on top of the MinHeap
     for(let i = 0; i < k - 1; i++) {
         let ele = minHeap.get();
         minHeap.remove();
 
-        // check if removed elements next fraction is in array then insert it into minHeap
+        // check if the elements numinator < arr.length, that means there are other fractions available in array, insert them into MinHeap
         if(ele.ne < n - 1) {
-            // ne will change de remains same
             minHeap.insert(new triplet(ele.ne+1, ele.de, arr[ele.ne+1] / arr[ele.de]));
         }
     }
-
+    // return the top elements numinator and denominator in the form of array
     return [arr[minHeap.get().ne], arr[minHeap.get().de]];
 };
